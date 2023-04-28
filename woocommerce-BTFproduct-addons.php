@@ -78,7 +78,7 @@ function wc_product_addons_display() {
         ob_start();
         ?>
         <div class="wc-product-addons-form">
-            <h6><strong><?php _e( 'Επιλέξτε πλέγμα', 'woocommerce-product-addons' ); ?></strong></h6>
+            <h6><strong><?php _e( 'Προτεινόμενες χορδές', 'woocommerce-product-addons' ); ?></strong></h6>
             <select name="wc_product_addons" class="wc-product-addons-select">
                 <option value=""><?php _e( 'Άπλεκτη', 'woocommerce-product-addons' ); ?></option>
                 <?php
@@ -132,9 +132,8 @@ function wc_product_addons_display() {
     }
 }
 
+add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_stock', 10 );
 add_action( 'woocommerce_single_product_summary', 'wc_product_addons_display', 25 );
-
-
 
 
 function wc_product_addons_add_to_cart( $cart_item_data, $product_id ) {
@@ -278,7 +277,6 @@ function wc_product_addons_add_separate_product_to_cart( $passed, $product_id, $
 
 
 add_filter( 'woocommerce_add_to_cart_validation', 'wc_product_addons_add_separate_product_to_cart', 10, 5 );
-
 
 
 function wc_product_addons_meta_box_content( $post ) {
