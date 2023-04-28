@@ -89,6 +89,7 @@ function wc_product_addons_display() {
     }
                 }
                 ?>
+          
             </select>
             <!-- Add the hidden input field to store the discount percentage -->
             <input type="hidden" name="wc_product_addons_discount_percentage" value="<?php echo esc_attr( $discount_percentage ); ?>">
@@ -116,7 +117,7 @@ function wc_product_addons_display() {
 
                     if (selectedOption.val() !== '') {
                         var discountAmount = originalPrice * (discountPercentage / 100);
-                        var message = 'Με την προσθήκη στο καλάθι κερδίζετε €' + discountAmount.toFixed(2);
+                        var message = 'Κερδίζετε ' + discountAmount.toFixed(2) + '€ ( Η έκπτωση εμφανίζεται με την Προσθήκη στο Καλάθι)';
                         messageElement.text(message).show();
                     } else {
                         messageElement.hide();
@@ -131,8 +132,9 @@ function wc_product_addons_display() {
     }
 }
 
-add_action( 'woocommerce_before_add_to_cart_button', 'wc_product_addons_display', 5 );
-add_action( 'woocommerce_after_add_to_cart_button', 'wc_product_addons_display', 5 );
+add_action( 'woocommerce_single_product_summary', 'wc_product_addons_display', 25 );
+
+
 
 
 function wc_product_addons_add_to_cart( $cart_item_data, $product_id ) {
