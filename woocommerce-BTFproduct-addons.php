@@ -132,8 +132,7 @@ function wc_product_addons_display() {
     }
 }
 
-add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_stock', 10 );
-add_action( 'woocommerce_single_product_summary', 'wc_product_addons_display', 25 );
+add_action( 'woocommerce_before_add_to_cart_button', 'wc_product_addons_display', 10 );
 
 
 function wc_product_addons_add_to_cart( $cart_item_data, $product_id ) {
