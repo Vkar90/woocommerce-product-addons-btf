@@ -78,20 +78,53 @@ function wc_product_addons_display() {
         ob_start();
         ?>
         <div class="wc-product-addons-form">
-            <h3><?php _e( 'Επιλέξτε πλέγμα', 'woocommerce-product-addons' ); ?></h3>
+            <h6><strong><?php _e( 'Επιλέξτε πλέγμα', 'woocommerce-product-addons' ); ?></strong></h6>
             <select name="wc_product_addons" class="wc-product-addons-select">
-                <option value=""><?php _e( 'None', 'woocommerce-product-addons' ); ?></option>
+                <option value=""><?php _e( 'Άπλεκτη', 'woocommerce-product-addons' ); ?></option>
                 <?php
                 foreach ( $product_addons as $addon_id ) {
                     $addon = wc_get_product( $addon_id );
-                    if ( $addon ) {
-                        echo '<option value="' . esc_attr( $addon->get_id() ) . '">' . esc_html( $addon->get_title() ) . ' - ' . wc_price( $addon->get_price() ) . '</option>';
-                    }
+                     if ( $addon ) {
+        echo '<option value="' . esc_attr( $addon->get_id() ) . '" data-price="' . esc_attr( $addon->get_price() ) . '">' . esc_html( $addon->get_title() ) . ' - ' . wc_price( $addon->get_price() ) . '</option>';
+    }
                 }
                 ?>
             </select>
             <!-- Add the hidden input field to store the discount percentage -->
             <input type="hidden" name="wc_product_addons_discount_percentage" value="<?php echo esc_attr( $discount_percentage ); ?>">
+            <!-- Add the new element to display the message -->
+    <p class="wc-product-addons-message" style="display: none;"></p>
+     <style>
+        .wc-product-addons-message {
+            font-weight: bold;
+            color: red;
+            font-size:12px;
+        }
+    </style>
+    <?php
+
+    // Add a jQuery script to handle the change event on the dropdown
+    ?>
+    <script>
+        (function ($) {
+            $(document).ready(function () {
+                $('.wc-product-addons-select').on('change', function () {
+                    var selectedOption = $(this).find('option:selected');
+                    var originalPrice = parseFloat(selectedOption.data('price')); // Assuming 'data-price' attribute stores the original price
+                    var discountPercentage = parseFloat($('input[name="wc_product_addons_discount_percentage"]').val());
+                    var messageElement = $('.wc-product-addons-message');
+
+                    if (selectedOption.val() !== '') {
+                        var discountAmount = originalPrice * (discountPercentage / 100);
+                        var message = 'Με την προσθήκη στο καλάθι κερδίζετε €' + discountAmount.toFixed(2);
+                        messageElement.text(message).show();
+                    } else {
+                        messageElement.hide();
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
         </div>
         <?php
         echo ob_get_clean();
