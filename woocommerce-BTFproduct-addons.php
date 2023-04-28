@@ -95,6 +95,11 @@ function wc_product_addons_display() {
             <input type="hidden" name="wc_product_addons_discount_percentage" value="<?php echo esc_attr( $discount_percentage ); ?>">
             <!-- Add the new element to display the message -->
     <p class="wc-product-addons-message" style="display: none;"></p>
+    <!-- Add the new text input field with a title 'Τάση Χορδής' and initially hide it -->
+            <div class="wc-tension-input" style="display: none;">
+                <h6><strong><?php _e( 'Τάση Χορδής', 'woocommerce-product-addons' ); ?></strong></h6>
+                <input type="text" name="wc_tension_input" class="wc-tension-input-field" />
+            </div>
      <style>
         .wc-product-addons-message {
             font-weight: bold;
@@ -114,13 +119,18 @@ function wc_product_addons_display() {
                     var originalPrice = parseFloat(selectedOption.data('price')); // Assuming 'data-price' attribute stores the original price
                     var discountPercentage = parseFloat($('input[name="wc_product_addons_discount_percentage"]').val());
                     var messageElement = $('.wc-product-addons-message');
+                    var tensionInput = $('.wc-tension-input');
 
                     if (selectedOption.val() !== '') {
                         var discountAmount = originalPrice * (discountPercentage / 100);
                         var message = 'Κερδίζετε ' + discountAmount.toFixed(2) + '€ ( Η έκπτωση εμφανίζεται με την Προσθήκη στο Καλάθι)';
                         messageElement.text(message).show();
+                        // Show the tension input when an option is selected
+						tensionInput.show();
                     } else {
                         messageElement.hide();
+                        // Hide the tension input when no option is selected
+						tensionInput.hide();
                     }
                 });
             });
