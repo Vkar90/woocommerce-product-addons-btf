@@ -154,6 +154,10 @@ function wc_product_addons_add_to_cart( $cart_item_data, $product_id ) {
             $cart_item_data['wc_product_addon_id'] = $addon_product_id;
             $cart_item_data['wc_product_addon_price'] = $addon->get_price();
         }
+        if ( isset( $_POST['wc_tension_input'] ) && ! empty( $_POST['wc_tension_input'] ) ) {
+    $cart_item_data['wc_tension_input'] = sanitize_text_field( $_POST['wc_tension_input'] );
+		}
+
     }
 
     return $cart_item_data;
@@ -260,6 +264,20 @@ function wc_product_addons_get_item_data( $item_data, $cart_item ) {
     return $item_data;
 }
 
+function wc_tension_input_display( $item_data, $cart_item ) {
+    if ( isset( $cart_item['wc_tension_input'] ) ) {
+        $item_data[] = array(
+            'key'   => __( 'Τάση Χορδής', 'woocommerce-product-addons' ),
+            'value' => $cart_item['wc_tension_input'],
+        );
+    }
+
+    return $item_data;
+}
+
+add_filter( 'woocommerce_get_item_data', 'wc_tension_input_display', 10, 2 );
+
+
 
 
 function wc_product_addons_add_separate_product_to_cart( $passed, $product_id, $quantity, $variation_id = 0, $variations = array() ) {
@@ -286,6 +304,16 @@ function wc_product_addons_add_separate_product_to_cart( $passed, $product_id, $
 
 
 add_filter( 'woocommerce_add_to_cart_validation', 'wc_product_addons_add_separate_product_to_cart', 10, 5 );
+
+function wc_tension_input_order_item_meta( $item, $cart_item_key, $values, $order ) {
+    if ( isset( $values['wc_tension_input'] ) ) {
+        $item->add_meta_data( __( 'Τάση Χορδής', 'woocommerce-product-addons' ), $values['wc_tension_input'] );
+    }
+}
+
+add_action( 'woocommerce_checkout_create_order_line_item', 'wc_tension_input_order_item_meta', 10, 4 );
+
+
 
 
 function wc_product_addons_meta_box_content( $post ) {
